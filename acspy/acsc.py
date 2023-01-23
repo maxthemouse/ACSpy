@@ -155,7 +155,7 @@ def getSerialNumber(hcomm, wait=SYNCHRONOUS):
     buffer_size = int32(ctypes.sizeof(s))
     ser_num_len = int32()
     call_acsc(acs.acsc_GetSerialNumber, hcomm, s, buffer_size, byref(ser_num_len), wait)
-    serial_number = s.value.decode('ascii')
+    serial_number = s.value.decode("ascii")
     return serial_number
 
 
@@ -298,9 +298,7 @@ def waitCommutated(hcomm, axis, timeout=INFINITE):
 
     Default timeout is 30 seconds.
     """
-    call_acsc(
-        acs.acsc_WaitMotorCommutated, hcomm, int32(axis), 1, int32(timeout)
-    )
+    call_acsc(acs.acsc_WaitMotorCommutated, hcomm, int32(axis), 1, int32(timeout))
 
 
 def disable(hcomm, axis, wait=SYNCHRONOUS):
@@ -399,6 +397,11 @@ def getProgramState(hc, nbuf, wait=SYNCHRONOUS):
 def halt(hcomm, axis, wait=SYNCHRONOUS):
     """Halts motion on specified axis."""
     call_acsc(acs.acsc_Halt, hcomm, axis, wait)
+
+
+def kill(hcomm, axis, wait=SYNCHRONOUS):
+    """Terminates a motion using reduced deceleration profile."""
+    call_acsc(acs.acsc_Kill, hcomm, axis, wait)
 
 
 def declareVariable(hcomm, vartype, varname, wait=SYNCHRONOUS):
@@ -579,9 +582,7 @@ def uploadDataFromController(
 def loadBuffer(hcomm, buffnumber, program, count=512, wait=SYNCHRONOUS):
     """Load a buffer into the ACS controller."""
     prgbuff = ctypes.create_string_buffer(str(program).encode(), count)
-    call_acsc(
-        acs.acsc_LoadBuffer, hcomm, buffnumber, byref(prgbuff), count, wait
-    )
+    call_acsc(acs.acsc_LoadBuffer, hcomm, buffnumber, byref(prgbuff), count, wait)
 
 
 def loadBuffersFromFile(hcomm, filename, wait=SYNCHRONOUS):
@@ -625,9 +626,7 @@ def spline(hcomm, flags, axis, period, wait=SYNCHRONOUS):
 
 
 def addPVPoint(hcomm, axis, point, velocity, wait=SYNCHRONOUS):
-    call_acsc(
-        acs.acsc_AddPVPoint, hcomm, axis, double(point), double(velocity), wait
-    )
+    call_acsc(acs.acsc_AddPVPoint, hcomm, axis, double(point), double(velocity), wait)
 
 
 def addPVTPoint(hcomm, axis, point, velocity, dt, wait=SYNCHRONOUS):
@@ -651,9 +650,7 @@ def addPoint(hcomm, axis, point, wait=SYNCHRONOUS):
 
 
 def extAddPoint(hcomm, axis, point, rate, wait=SYNCHRONOUS):
-    call_acsc(
-        acs.acsc_ExtAddPoint, hcomm, axis, double(point), double(rate), wait
-    )
+    call_acsc(acs.acsc_ExtAddPoint, hcomm, axis, double(point), double(rate), wait)
 
 
 def endSequence(hcomm, axis, wait=SYNCHRONOUS):
