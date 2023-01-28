@@ -61,6 +61,13 @@ MST_INPOS = 0x00000010
 MST_MOVE = 0x00000020
 MST_ACC = 0x00000040
 
+# Safety Control Masks
+ACSC_SAFETY_RL = 0x00000001
+ACSC_SAFETY_LL = 0x00000002
+ACSC_SAFETY_SRL = 0x00000020
+ACSC_SAFETY_SLL = 0x00000040
+ACSC_SAFETY_PE = 0x00001000
+
 SYNCHRONOUS = None
 INVALID = -1
 IGNORE = -1
@@ -240,6 +247,14 @@ def getAxisState(hcomm, axis, wait=SYNCHRONOUS):
         "pos lock": hex(state)[-3] == "2",
     }
     return ast
+
+
+def getFault(hcomm, axis, wait=SYNCHRONOUS):
+    """The function retrieves the set of bits that indicate the motor or system faults."""
+    state = ctypes.c_int()
+    call_acsc(acs.acsc_GetFault, hcomm, axis, byref(state), wait)
+    state = state.value
+    return state
 
 
 def registerEmergencyStop():

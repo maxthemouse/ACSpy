@@ -146,3 +146,17 @@ class Axis(object):
     def kill(self, wait=acsc.SYNCHRONOUS):
         """Terminates a motion using reduced deceleration profile."""
         acsc.kill(self.controller.hc, self.axisno, wait)
+
+    @property
+    def right_limit(self, wait=acsc.SYNCHRONOUS):
+        val = acsc.getFault(self.controller.hc, self.axisno, wait)
+        return hex(val)[-2] == '2'
+
+    @property
+    def left_limit(self, wait=acsc.SYNCHRONOUS):
+        val = acsc.getFault(self.controller.hc, self.axisno, wait)
+        return hex(val)[-2] == '4'
+
+    @property
+    def fault(self, wait=acsc.SYNCHRONOUS):
+        return acsc.getFault(self.controller.hc, self.axisno, wait)
