@@ -127,6 +127,7 @@ def openCommDirect():
     if hcomm == -1:
         err = getLastError()
         err_lng = int32()
+        s = create_string_buffer(256)
         if (
             acs.acsc_GetErrorString(
                 hcomm, int32(err), s, int32(ctypes.sizeof(s)), byref(err_lng)
@@ -148,6 +149,7 @@ def openCommEthernetTCP(address="10.0.0.100", port=701):
     if hcomm == -1:
         err = getLastError()
         err_lng = int32()
+        s = create_string_buffer(256)
         if (
             acs.acsc_GetErrorString(
                 hcomm, int32(err), s, int32(ctypes.sizeof(s)), byref(err_lng)
@@ -164,9 +166,17 @@ def openCommEthernetTCP(address="10.0.0.100", port=701):
 
 
 def getSerialNumber(hcomm, wait=SYNCHRONOUS):
+    s = create_string_buffer(256)
     buffer_size = int32(ctypes.sizeof(s))
     ser_num_len = int32()
-    call_acsc(acs.acsc_GetSerialNumber, hcomm, s, buffer_size, byref(ser_num_len), wait)
+    call_acsc(
+        acs.acsc_GetSerialNumber,
+        hcomm,
+        s,
+        buffer_size,
+        byref(ser_num_len),
+        wait,
+    )
     serial_number = s.value.decode("ascii")
     return serial_number
 
@@ -693,11 +703,13 @@ def setOutput(hcomm, port, bit, val, wait=SYNCHRONOUS):
     call_acsc(acs.acsc_SetOutput, hcomm, port, bit, val, wait)
 
 
-def call_acsc(func, *args, **kwargs):  # wrap acs lib calls to handle errors
+def call_acsc(func, *args, **kwargs):
+    """Wraps ACS library to handle errors."""
     rv = func(*args, **kwargs)
-    if rv == 0:  # there was an error!
-        err = acs.acsc_GetLastError()  # retrieve error code
+    if rv == 0:  # There was an error
+        err = acs.acsc_GetLastError()  # Retrieve error code
         err_lng = int32()
+        s = create_string_buffer(256)
         hc = args[0]
         if (
             acs.acsc_GetErrorString(
