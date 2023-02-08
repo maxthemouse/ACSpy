@@ -7,11 +7,13 @@ This module is a wrapper for the ACS C library using ctypes
 
 """
 from __future__ import division, print_function
+
 import ctypes
-from ctypes import byref, create_string_buffer
-import numpy as np
 import platform
 import re
+from ctypes import byref, create_string_buffer
+
+import numpy as np
 
 
 class AcscError(Exception):

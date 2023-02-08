@@ -4,6 +4,7 @@ This module contains an [incomplete] object for communicating with an ACS contro
 
 """
 from __future__ import division, print_function
+
 from acspy import acsc
 
 
@@ -150,12 +151,12 @@ class Axis(object):
     @property
     def right_limit(self, wait=acsc.SYNCHRONOUS):
         val = acsc.getFault(self.controller.hc, self.axisno, wait)
-        return hex(val)[-2] == '2'
+        return hex(val)[-2] == "2"
 
     @property
     def left_limit(self, wait=acsc.SYNCHRONOUS):
         val = acsc.getFault(self.controller.hc, self.axisno, wait)
-        return hex(val)[-2] == '4'
+        return hex(val)[-2] == "4"
 
     @property
     def fault(self, wait=acsc.SYNCHRONOUS):
