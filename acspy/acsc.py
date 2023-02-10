@@ -21,9 +21,10 @@ class AcscError(Exception):
 
 
 # Import the ACS C library DLL
-if platform.architecture()[1] == "ELF":
+if platform.system() == "Linux":
     acs = ctypes.cdll.LoadLibrary("/usr/lib/ACSMotionControl/libACSCL_x64.so")
 else:
+    # default to Windows
     if platform.architecture()[0] == "32bit":
         acs = ctypes.windll.LoadLibrary("ACSCL_x86.dll")
     if platform.architecture()[0] == "64bit":
